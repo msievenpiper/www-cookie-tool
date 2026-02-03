@@ -1,0 +1,36 @@
+{
+  "name": "cookie-tool",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Desktop app for generating cookie-setting URLs across multiple brands and TLDs",
+  "main": "dist-electron/main.js",
+  "author": "Your Name",
+  "license": "MIT",
+  "scripts": {
+    "dev": "tsc && tsc -p tsconfig.preload.json && mv dist-electron/preload.js dist-electron/preload.cjs && vite",
+    "build": "tsc && tsc -p tsconfig.preload.json && mv dist-electron/preload.js dist-electron/preload.cjs && vite build && electron-builder",
+    "build:mac": "tsc && tsc -p tsconfig.preload.json && mv dist-electron/preload.js dist-electron/preload.cjs && vite build && electron-builder --mac",
+    "build:win": "tsc && tsc -p tsconfig.preload.json && mv dist-electron/preload.js dist-electron/preload.cjs && vite build && electron-builder --win",
+    "preview": "tsc && tsc -p tsconfig.preload.json && mv dist-electron/preload.js dist-electron/preload.cjs && vite build && vite preview"
+  },
+  "dependencies": {
+    "electron-store": "^8.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@vitejs/plugin-react": "^4.2.0",
+    "autoprefixer": "^10.4.16",
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1",
+    "postcss": "^8.4.32",
+    "tailwindcss": "^3.3.6",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.8",
+    "vite-plugin-electron": "^0.28.0",
+    "vite-plugin-electron-renderer": "^0.14.5"
+  }
+}
