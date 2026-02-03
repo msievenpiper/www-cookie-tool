@@ -41,6 +41,16 @@ The preload script **must** be .cjs because Electron's main process loads it wit
 
 ## Architecture
 
+### System Tray Integration
+
+The app includes a system tray icon that provides:
+- **Persistent access**: App remains accessible via tray even when window is closed
+- **Quick actions**: Right-click tray icon for Show App/Quit menu
+- **Smart behavior**: On macOS, closing the window hides to tray instead of quitting
+- **Template icon**: Monochrome icon automatically adapts to light/dark mode on macOS
+
+Tray icon resources are located in `resources/trayTemplate.svg`.
+
 ### Electron IPC Architecture
 
 The app uses a secure IPC pattern with strict isolation:

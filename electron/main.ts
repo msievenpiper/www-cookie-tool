@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, clipboard, shell } from 'electron';
+import { app, BrowserWindow, ipcMain, clipboard, shell, Tray, Menu, nativeImage } from 'electron';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import Store from 'electron-store';
@@ -9,11 +9,24 @@ const __dirname = dirname(__filename);
 const store = new Store();
 
 let mainWindow: BrowserWindow | null = null;
+let tray: Tray | null = null;
+
+// Extend app object to track quit state
+declare module 'electron' {
+  interface App {
+    isQuitting?: boolean;
+  }
+}
 
 function createWindow() {
+  const iconPath = process.env.VITE_DEV_SERVER_URL
+    ? join(__dirname, '../build/icon.png')
+    : undefined; // In production, electron-builder handles the icon
+
   mainWindow = new BrowserWindow({
     width: 800,
     height: 900,
+    icon: iconPath,
     webPreferences: {
       preload: join(__dirname, 'preload.cjs'),
       contextIsolation: true,
@@ -29,17 +42,84 @@ function createWindow() {
     mainWindow.loadFile(join(__dirname, '../dist/index.html'));
   }
 
+  // On macOS, minimize to tray instead of closing
+  mainWindow.on('close', (event) => {
+    if (process.platform === 'darwin' && !app.isQuitting) {
+      event.preventDefault();
+      mainWindow?.hide();
+    }
+  });
+
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
 }
 
-app.whenReady().then(createWindow);
+function createTray() {
+  // Determine the correct icon path based on environment
+  const iconPath = process.env.VITE_DEV_SERVER_URL
+    ? join(__dirname, '../resources/trayTemplate.png')
+    : join(process.resourcesPath, 'resources/trayTemplate.png');
+
+  console.log('Loading tray icon from:', iconPath);
+
+  // Create native image and mark as template for macOS
+  const icon = nativeImage.createFromPath(iconPath);
+
+  console.log('Icon loaded, isEmpty:', icon.isEmpty());
+
+  if (process.platform === 'darwin') {
+    icon.setTemplateImage(true);
+  }
+
+  tray = new Tray(icon);
+  tray.setToolTip('Cookie Tool');
+
+  console.log('Tray created successfully');
+
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Show App',
+      click: () => {
+        if (mainWindow === null) {
+          createWindow();
+        } else {
+          mainWindow.show();
+        }
+      },
+    },
+    { type: 'separator' },
+    {
+      label: 'Quit',
+      click: () => {
+        app.isQuitting = true;
+        app.quit();
+      },
+    },
+  ]);
+
+  tray.setContextMenu(contextMenu);
+
+  // Show window on tray icon click (mainly for Windows/Linux)
+  tray.on('click', () => {
+    if (mainWindow === null) {
+      createWindow();
+    } else if (mainWindow.isVisible()) {
+      mainWindow.hide();
+    } else {
+      mainWindow.show();
+    }
+  });
+}
+
+app.whenReady().then(() => {
+  createWindow();
+  createTray();
+});
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+  // Keep app running in tray even when all windows are closed
+  // Users can quit from the tray menu
 });
 
 app.on('activate', () => {

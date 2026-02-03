@@ -1,0 +1,10 @@
+<svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+  <!-- Simple cookie icon: circle with chocolate chips -->
+  <circle cx="8" cy="8" r="7" fill="#D2691E" stroke="#8B4513" stroke-width="0.5"/>
+  <!-- Chocolate chips -->
+  <circle cx="5" cy="6" r="1.2" fill="#3E2723"/>
+  <circle cx="10" cy="5" r="1" fill="#3E2723"/>
+  <circle cx="8" cy="9" r="1" fill="#3E2723"/>
+  <circle cx="11" cy="10" r="0.8" fill="#3E2723"/>
+  <circle cx="6" cy="11" r="0.9" fill="#3E2723"/>
+</svg>
