@@ -10,6 +10,9 @@
     "dev": "tsc && tsc -p tsconfig.preload.json && mv dist-electron/preload.js dist-electron/preload.cjs && vite",
     "build": "tsc && tsc -p tsconfig.preload.json && mv dist-electron/preload.js dist-electron/preload.cjs && vite build && electron-builder",
     "build:mac": "tsc && tsc -p tsconfig.preload.json && mv dist-electron/preload.js dist-electron/preload.cjs && vite build && electron-builder --mac",
+    "build:mac:intel": "tsc && tsc -p tsconfig.preload.json && mv dist-electron/preload.js dist-electron/preload.cjs && vite build && electron-builder --mac --x64",
+    "build:mac:arm": "tsc && tsc -p tsconfig.preload.json && mv dist-electron/preload.js dist-electron/preload.cjs && vite build && electron-builder --mac --arm64",
+    "build:mac:universal": "tsc && tsc -p tsconfig.preload.json && mv dist-electron/preload.js dist-electron/preload.cjs && vite build && electron-builder --mac --universal",
     "build:win": "tsc && tsc -p tsconfig.preload.json && mv dist-electron/preload.js dist-electron/preload.cjs && vite build && electron-builder --win",
     "preview": "tsc && tsc -p tsconfig.preload.json && mv dist-electron/preload.js dist-electron/preload.cjs && vite build && vite preview"
   },

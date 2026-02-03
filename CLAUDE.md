@@ -14,13 +14,22 @@ This is an Electron desktop application for generating cookie-setting URLs acros
 # Development mode with hot reload and DevTools
 npm run dev
 
-# Build for macOS (creates .dmg and .zip in release/{version}/)
+# Build for macOS - both Intel and Apple Silicon (creates .dmg and .zip in release/{version}/)
 npm run build:mac
+
+# Build for macOS - Intel only (x64)
+npm run build:mac:intel
+
+# Build for macOS - Apple Silicon only (arm64)
+npm run build:mac:arm
+
+# Build for macOS - Universal binary (larger, includes both architectures)
+npm run build:mac:universal
 
 # Build for Windows (creates NSIS installer in release/{version}/)
 npm run build:win
 
-# Build for both platforms
+# Build for all platforms and architectures
 npm run build
 
 # Preview production build
