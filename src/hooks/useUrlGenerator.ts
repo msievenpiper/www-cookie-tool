@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Cookie, Preset } from '../utils/types';
 import { generateCookieUrl } from '../utils/urlEncoder';
 import { TLDS } from '../utils/constants';
@@ -10,6 +10,22 @@ export function useUrlGenerator() {
   const [destination, setDestination] = useState('');
   const [generatedUrl, setGeneratedUrl] = useState('');
   const [error, setError] = useState('');
+  const isAutoFilledRef = useRef(false);
+
+  // Auto-fill destination when brand or TLD changes
+  useEffect(() => {
+    if (brand && tld) {
+      const autoFilledUrl = `https://www.${brand}.${tld}`;
+      // Only auto-fill if destination is empty or was previously auto-filled
+      if (!destination || isAutoFilledRef.current) {
+        setDestination(autoFilledUrl);
+        isAutoFilledRef.current = true;
+      }
+    } else if (brand && !tld && isAutoFilledRef.current) {
+      setDestination('');
+      isAutoFilledRef.current = false;
+    }
+  }, [brand, tld, destination]);
 
   const addCookie = () => {
     setCookies([...cookies, { name: '', value: '' }]);
@@ -56,6 +72,7 @@ export function useUrlGenerator() {
     setTld(preset.tld);
     setCookies(preset.cookies.length > 0 ? preset.cookies : [{ name: '', value: '' }]);
     setDestination(preset.destination || '');
+    isAutoFilledRef.current = false; // Preset destination is user-defined
     setGeneratedUrl('');
     setError('');
   };
@@ -72,8 +89,15 @@ export function useUrlGenerator() {
     setTld(TLDS[0]);
     setCookies([{ name: '', value: '' }]);
     setDestination('');
+    isAutoFilledRef.current = false;
     setGeneratedUrl('');
     setError('');
+  };
+
+  // Custom setDestination that tracks manual changes
+  const handleSetDestination = (value: string) => {
+    setDestination(value);
+    isAutoFilledRef.current = false; // Mark as manually edited
   };
 
   return {
@@ -86,7 +110,7 @@ export function useUrlGenerator() {
     removeCookie,
     updateCookie,
     destination,
-    setDestination,
+    setDestination: handleSetDestination,
     generatedUrl,
     error,
     generateUrl,
