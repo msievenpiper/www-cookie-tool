@@ -52,11 +52,6 @@ export function useUrlGenerator() {
 
     const validCookies = cookies.filter(c => c.name.trim() && c.value.trim());
 
-    if (validCookies.length === 0) {
-      setError('Please add at least one cookie with name and value');
-      return null;
-    }
-
     try {
       const url = generateCookieUrl(brand, tld, validCookies, destination);
       setGeneratedUrl(url);

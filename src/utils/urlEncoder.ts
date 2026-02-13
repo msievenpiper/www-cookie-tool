@@ -17,10 +17,6 @@ export function generateCookieUrl(
   cookies: Cookie[],
   destination?: string
 ): string {
-  if (cookies.length === 0) {
-    throw new Error('At least one cookie is required');
-  }
-
   // Format cookies as comma-separated n={name}&v={value} pairs
   const cookieString = cookies
     .map(cookie => `n=${cookie.name}&v=${cookie.value}`)
