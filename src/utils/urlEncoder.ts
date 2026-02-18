@@ -17,8 +17,11 @@ export function generateCookieUrl(
   cookies: Cookie[],
   destination?: string
 ): string {
+  // If no cookies provided, add a placeholder to satisfy the endpoint requirement
+  const effectiveCookies = cookies.length > 0 ? cookies : [{ name: '1', value: '1' }];
+
   // Format cookies as comma-separated n={name}&v={value} pairs
-  const cookieString = cookies
+  const cookieString = effectiveCookies
     .map(cookie => `n=${cookie.name}&v=${cookie.value}`)
     .join(',');
 
