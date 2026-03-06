@@ -16,6 +16,7 @@ export const BRANDS = [
 
 export const TLDS = [
   'qa.protected.net',
+  'uat.protected.net',
   'xyz',
   'com'
 ];
